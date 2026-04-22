@@ -1,6 +1,10 @@
 pipeline {
     agent any
-
+    
+    triggers {
+    githubPush()
+    }
+    
     environment {
         DOCKERHUB_CREDENTIALS = credentials('docker-hub-ksudhy')
         IMAGE_NAME = "ksudhy/nodeapp"
@@ -10,7 +14,7 @@ pipeline {
 
         stage('SCM Checkout') {
             steps {
-                git 'https://github.com/ravdy/nodejs-demo.git'
+                checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: 'github-token', url: 'https://github.com/smartadmins/nodejs-demo.git']])
             }
         }
 
@@ -42,3 +46,4 @@ pipeline {
         }
     }
 }
+
